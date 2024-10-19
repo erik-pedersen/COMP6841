@@ -1,0 +1,3 @@
+Learn PHP + how to exploit it
+Like seriously, learn PHP
+also webshells seem cool, learn about that

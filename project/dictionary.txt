@@ -1,0 +1,7 @@
+apple
+dog
+cat
+lol
+epic
+hello
+world

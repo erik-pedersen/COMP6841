@@ -1,0 +1,31 @@
+=====THE PLAN=====
+
+One per week.
+
+Around 10 hrs on each, split evenly between each level (Natas has 34 levels, so 20 minutes per level before checking solution)
+
+
+
+======NATAS=======
+
+Natas0 --> Natas1:
+Very simple, just inspect element and the flag is an HTML comment
+
+Natas1 --> Natas2:
+Same thing, just hit F12
+
+Natas2 --> Natas3:
+First interesting one. "There is nothing on this page" implies that we need to go to some other page. In the HTML we have an image under "files/image.png."
+
+My first impression was to see if the image contained any metadata, so I checked the metadata and came up with nothing.
+
+I knew from setting up my public_html on CSE that websites do often have file structures, and that this image lives under a directory called "files." So, we navigate to that directory (natas2.natas.labs.overthewire.org/files), and the flag is under users.txt.
+
+Natas3 --> Natas4:
+Having never done CTFs before, I already got stuck here for 20 minutes, and had to check the solution. This is not a bad thing, because now I have an opportunity to learn something new!
+
+I learnt that websites can avoid being seen by Google or other web-bots by using a file called "robots.txt." And indeed, natas3.natas.labs.overthewire.org/robots.txt exists!
+
+Navigating to that, we see that the website that cannot be seen by web-bots is a directory called "s3cr3t," so navigating to natas3.natas.labs.overthewire.org/s3cr3t immediately gives us the flag.
+
+Out of curiosity, I checked if facebook.com had a robots.txt, and lo and behold: https://facebook.com/robots.txt
