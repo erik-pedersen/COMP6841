@@ -1,11 +1,3 @@
-# THE PLAN
-
-One per week.
-
-Around 10 hrs on each, split evenly between each level (Natas has 34 levels, so 20 minutes per level before checking solution)
-
-
-
 # NATAS
 
 ## Natas0 --> Natas1:
@@ -194,6 +186,8 @@ Just to play around with the webshell a bit more, I made a small bash script tha
 ![alt text](image13.png)
 ![alt text](image14.png)
 
+Something I could possibly add is automatic conversion of ASCII symbols to the corresponding URL code (so I do not have to type in %20 to mean 'space')
+
 flag=trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC
 
 ## Natas13 --> Natas14:
@@ -261,9 +255,6 @@ Does it work? Yeah. But it's slow and it sucks and I should probably learn how t
 Anyway, I got the flag!
 
 flag=hPkjKYviLQctEW33QmuXL6eDVfMW4sGo
-
-## Interlude
-At this point I took a break and revisited natas15.
 
 ## Natas16 --> Natas17:
 Another 'grep' type problem, this time with even more banned characters! Again, as we learnt in lecture... Blacklisting is not a good solution!
