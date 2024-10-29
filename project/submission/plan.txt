@@ -18,6 +18,7 @@ Mindset changes:
 	-Do not be afraid of looking at solutions. Sometimes you genuinely do not know.
 	-Probing whatever you're trying to find an exploit can be very fruitful. Instead of rushing into doing technical things, just see if you can break the program with some weird inputs!
 	-Don't be afraid to FAAFO (Mess around and find out) in the war games. I spent quite a bit of time just messing around with natas15 to see what I could do - it really helps you better understand what's going on, and might give some ideas for the future.
+	-Using previously learnt tools in future tools: I learnt how to use ltrace in leviathan, and used it again just as a basic tool is narnia2.
 
 Tools I made:
 
