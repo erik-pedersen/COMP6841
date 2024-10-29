@@ -135,7 +135,7 @@ Ok, what's happening here is a bit complicated.
 
 When `open` is called on the `ifile`, it is going to open the entire file name `/tmp/tmp.uKzou8GatR/aaaaaaaaaaaa/tmp/5Ny0ChdR` - but that is exactly the symlink to the password file, so in effect, we are just opening the password file.
 
-Now, when `open` is called on the `ofile`, it only sees the `/tmp/5Ny0ChdR` part, and so that is the location that we write to.
+Now, when `open` is called on the `ofile`, it only sees the `/tmp/5Ny0ChdR` part, since that's the part that got overwritten into the `ofile` buffer, and so that is the location that we write to.
 
 Wheew, alright, let's run the binary and see if it worked!
 
