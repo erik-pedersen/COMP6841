@@ -1,6 +1,6 @@
 # NARNIA
 
-## Narnia1 --> Narnia1:
+## Narnia1 --> Narnia2:
 Pretty simple to begin with, we run `./narnia1` and are presented with a prompt asking us to change a variable  of value `0x41414141` (which I recognise as the ASCII for `AAAA`) to have the value `0xdeadbeef`.
 
 We'll first try to find where this variable lives by entering into our buffer the classic `AAAABBBBCCCCDDDD`...
