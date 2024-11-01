@@ -77,3 +77,17 @@ Now I'm really curious why my previous attempts did not work - when I have more 
 flag=IxPJbQtH8q
 
 ## Behemoth2 --> Behemoth3:
+
+This one was really cool, and made me realise exactly WHY 'calls to os.system are dangerous' in the context of python programming. 
+
+Effectively, we just use the fact that whenever you call a shell function (`echo`, `cat`, `touch`), it attempts to locate the appropriate binary by searching the `$PATH` environment variable.
+
+If you stick your own directory at the front of `$PATH`, with your 'own version' of `echo`, `cat`, whatever in said directory, then that will be the first version of the binary found, and therefore run. 
+
+The trick is, your `own version` of a shell function could in fact be something completely wild, like privilege escalation, obtaining a shell, or in this case, reading behemoth3's flag!
+
+Indeed, the behemoth2 binary makes a direct call to `touch`. So, we can simply write our own version of `touch` that actually runs `cat` on `/etc/behemoth_pass/behemoth3` and update the `$PATH` variable to first check our own temporary directory. 
+
+Just like that, running `behemoth2` gives us the flag! 
+
+Very clever, very, \textit{very} nasty.

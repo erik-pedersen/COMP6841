@@ -1,9 +1,13 @@
 \documentclass{article}
 
+\usepackage{hyperref}
+
 \title{Trying to make it OverTheWire}
 \author{Erik Pedersen}
 
 \begin{document}
+\maketitle
+
 Key things learnt:
 \begin{itemize}
 	\item What the hell PHP is
@@ -12,9 +16,10 @@ Key things learnt:
 	\item A little bit of x86 assembly
 	\item Some cool techniques e.g 'yes/no querying' (Natas15 $\to$ Natas16)
 	\item XOR encryption (natas11)
-	\item An alternative buffer overflow attack involving environment variables
-	\item Exploiting system() calls by manipulating \$PATH
+	\item An alternative buffer overflow attack involving environment variables (Behemoth1)
+	\item Exploiting system() calls by manipulating (Behemoth2) \$PATH
 \end{itemize}
+
 Resources used:
 
 \begin{itemize}
@@ -34,8 +39,8 @@ Mindset changes:
 
 	\item Do not be afraid of looking at solutions. Sometimes you genuinely do not know.
 	\item Probing whatever you're trying to find an exploit can be very fruitful. Instead of rushing into doing technical things, just see if you can break the program with some weird inputs!
-	\item Don't be afraid to FAAFO (Mess around and find out) in the war games. I spent quite a bit of time just messing around with natas15 to see what I could do - it really helps you better understand what's going on, and might give some ideas for the future.
-	\item Using previously learnt tools in future tools: I learnt how to use ltrace in leviathan, and used it again just as a basic tool is narnia2.
+	\item Don't be afraid to FAAFO (Mess around and find out) in the war games. I spent quite a bit of time just messing around with natas15 to see what I could do (that's where webshell.sh came from!) - it really helps you better understand what's going on, and might give some ideas for the future.
+	\item Using previously learnt tools in future tools: I learnt how to use ltrace in leviathan, and used it again just as a basic tool in narnia2.
 
 \end{itemize}
 
@@ -44,7 +49,10 @@ Tools I made:
 \begin{itemize}
 	\item I'm sure some things could be adapted to be more modular, they're all mostly for a particular war game at the moment.
 	\item That being said, I have become better at actually writing tools to solve problems
-	\item Small C program that, given the name of the target file and name of environment variable, tells you the address that environment variable will be located.
+	\item get\_addr: Small C program that, given the name of the target file and name of environment variable, tells you the address that environment variable will be located.
+	\item Some python scripts for encoding/decoding in krypton
+	\item A set of similar tools for slowly peacing together flags in Natas
+	\item A series of tools for piping shellcode into binaries (the pwnarniaX.py series :D) 
 \end{itemize}
 
 What I want to do next:
@@ -63,7 +71,7 @@ Advice to my past self:
 Your security engineering understanding and growth over the duration of the project:
 
 \begin{itemize}
-	\item I have a much better idea of the types of (arguably, quite legacy) vulnerabilities that exist in binarys (Narnia \& Behemoth), and some web vulnerabilities (Natas). 
+	\item I have a much better idea of the types of (arguably, quite legacy) vulnerabilities that exist in binarys (Narnia \& Behemoth), and some web vulnerabilities (Natas). I also did a little bit of cryptography stuff in Krypton, but honestly found it quite boring.
 \end{itemize}
 
 Personal analysis and reflections that make your journey and/or resources unique:
@@ -93,7 +101,13 @@ Progression of your project proposal
 Impressive elements of your project - what cool stuff did you do?!:
 
 \begin{itemize}
-	\item I think the coolest part of this project was when I was able to draw on knowledge I learnt about in previous CTFs to use in future CTFs. My first instinct whenever I ran into a new binary or website is to play around with it in weird ways, for binarys I run ltrace/strace, for websites I inspect element.
+	\item I think the coolest part of this project was when I was able to draw on knowledge I learnt about in previous CTFs to use in future CTFs. My first instinct whenever I ran into a new binary or website is to play around with it in weird ways, for binarys I run ltrace/strace, for websites I inspect element. 
+	\item I'd also find myself drawing on previous knowledge to try and crack a problem. My first instinct in Behemoth1 was to write shellcode into a buffer and then return back to that buffer. That did not end up working - and I'm glad it didn't, because it meant I got to learn more about environment variables!
 	\item Another cool and satisfying part is all the little programs that I made along the way to help solve the war games. Although they aren't very elegant, they work, and for that I am proud :)
 \end{itemize}
+
+\textbf{Link to the wargames:}
+
+\url{https://github.com/erik-pedersen/COMP6841}
+
 \end{document}

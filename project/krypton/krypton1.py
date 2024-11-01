@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+# It's not elegant but it worked :')
+
 def splitString(s):
     # Split up into words
     return s.split(' ')
