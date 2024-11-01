@@ -39,9 +39,23 @@ What I want to do next:
 Advice to my past self:
 	
 	- Manage time better.
+
+Your security engineering understanding and growth over the duration of the project:
+	-I have a much better idea of the types of (arguably, quite legacy) vulnerabilities that exist in binarys (Narnia & Behemoth), and some web vulnerabilities (Natas). 
+
+Personal analysis and reflections that make your journey and/or resources unique:
+	-All of my analysis was completed as part of the corresponding war game folders.
+
+Analysis: The level of depth you have explored in your chosen project:
+	-I wish I spent more time learning how to do the wargames in Behemoth. Although I made some progress, it looks really fun. Instead, I spent a considerable amount of time doing Natas. Atleast that gave me some experience writing web-interacting Python!
 	
+Reflection: How you document issues you encounter and how you overcame that adversity:
+	-Any issues I had are also part of the analysis, things I tried that did not work, times where I was not making any progress.
 
+Progression of your project proposal
+	-I do not think I met the expectation I outlined in the project proposal. I think I got too carried away doing Natas that I neglected the other war games. Again, I wish I did more Behemoth lol
 
--------------------------------------------
-Ideas for presentation:
-	- Do one of the brute forces in the background while doing the presentation (might need to start early cause it's slow lol)
+Impressive elements of your project - what cool stuff did you do?!:
+	-I think the coolest part of this project was when I was able to draw on knowledge I learnt about in previous CTFs to use in future CTFs. My first instinct whenever I ran into a new binary or website is to play around with it in weird ways, for binarys I run ltrace/strace, for websites I inspect element.
+	-Another cool and satisfying part is all the little programs that I made along the way to help solve the war games. Although they aren't very elegant, they work, and for that I am proud :)
+
