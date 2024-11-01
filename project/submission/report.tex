@@ -5,63 +5,95 @@
 
 \begin{document}
 Key things learnt:
-
-	-What the hell PHP is
-	-Basics of pwntools, gdb/pwndbg
-	-ltrace and strace (so helpful!)
-	-A little bit of x86 assembly
-	-Some cool techniques e.g 'yes/no querying' (Natas15 --> Natas16)
-	-XOR encryption (natas11)
-	-An alternative buffer overflow attack involving environment variables
-	-Exploiting system() calls by manipulating \$PATH
-
+\begin{itemize}
+	\item What the hell PHP is
+	\item Basics of pwntools, gdb/pwndbg
+	\item ltrace and strace (so helpful!)
+	\item A little bit of x86 assembly
+	\item Some cool techniques e.g 'yes/no querying' (Natas15 --> Natas16)
+	\item XOR encryption (natas11)
+	\item An alternative buffer overflow attack involving environment variables
+	\item Exploiting system() calls by manipulating \$PATH
+\end{itemize}
 Resources used:
 
-	-Google, mostly lol
-		-Like seriously, when learning new techniques/tools, I was mostly just Googling how to do things.
-	-I did some narnia, and found https://shell-storm.org/shellcode/index.html quite helpful
-	-Online PHP interpreter
-	-For Krypton and Natas, a bunch of online tools for hashing, encoding/decoding things.
+\begin{itemize}
+	\item Google, mostly lol
+		\begin{itemize}
+			\item Like seriously, when learning new techniques/tools, I was mostly just Googling how to do things.
+		\end{itemize}
+	\item I did some narnia, and found https://shell-storm.org/shellcode/index.html quite helpful
+	\item Online PHP interpreter
+	\item For Krypton and Natas, a bunch of online tools for hashing, encoding/decoding things.
+
+\end{itemize}
 
 Mindset changes:
 
-	-Do not be afraid of looking at solutions. Sometimes you genuinely do not know.
-	-Probing whatever you're trying to find an exploit can be very fruitful. Instead of rushing into doing technical things, just see if you can break the program with some weird inputs!
-	-Don't be afraid to FAAFO (Mess around and find out) in the war games. I spent quite a bit of time just messing around with natas15 to see what I could do - it really helps you better understand what's going on, and might give some ideas for the future.
-	-Using previously learnt tools in future tools: I learnt how to use ltrace in leviathan, and used it again just as a basic tool is narnia2.
+\begin{itemize}
+
+	\item Do not be afraid of looking at solutions. Sometimes you genuinely do not know.
+	\item Probing whatever you're trying to find an exploit can be very fruitful. Instead of rushing into doing technical things, just see if you can break the program with some weird inputs!
+	\item Don't be afraid to FAAFO (Mess around and find out) in the war games. I spent quite a bit of time just messing around with natas15 to see what I could do - it really helps you better understand what's going on, and might give some ideas for the future.
+	\item Using previously learnt tools in future tools: I learnt how to use ltrace in leviathan, and used it again just as a basic tool is narnia2.
+
+\end{itemize}
 
 Tools I made:
 
-	-I'm sure some things could be adapted to be more modular, they're all mostly for a particular war game at the moment.
-	-That being said, I have become better at actually writing tools to solve problems
-	-Small C program that, given the name of the target file and name of environment variable, tells you the address that environment variable will be located.
-	 
+\begin{itemize}
+	\item I'm sure some things could be adapted to be more modular, they're all mostly for a particular war game at the moment.
+	\item That being said, I have become better at actually writing tools to solve problems
+	\item Small C program that, given the name of the target file and name of environment variable, tells you the address that environment variable will be located.
+\end{itemize}
 
 What I want to do next:
 
-	- Finish off Narnia and try out Behemoth
-	- Try out some more hackthebox :)
+\begin{itemize}
+	\item Finish off Narnia and Behemoth
+	\item Try out some more hackthebox :)
+\end{itemize}
 
 Advice to my past self:
 	
-	- Manage time better.
+\begin{itemize}
+	\item Manage time better.
+\end{itemize}
 
 Your security engineering understanding and growth over the duration of the project:
-	-I have a much better idea of the types of (arguably, quite legacy) vulnerabilities that exist in binarys (Narnia & Behemoth), and some web vulnerabilities (Natas). 
+
+\begin{itemize}
+	\item I have a much better idea of the types of (arguably, quite legacy) vulnerabilities that exist in binarys (Narnia \& Behemoth), and some web vulnerabilities (Natas). 
+\end{itemize}
 
 Personal analysis and reflections that make your journey and/or resources unique:
-	-All of my analysis was completed as part of the corresponding war game folders.
+
+\begin{itemize}
+	\item All of my analysis was completed as part of the corresponding war game folders.
+\end{itemize}
 
 Analysis: The level of depth you have explored in your chosen project:
-	-I wish I spent more time learning how to do the wargames in Behemoth. Although I made some progress, it looks really fun. Instead, I spent a considerable amount of time doing Natas. Atleast that gave me some experience writing web-interacting Python!
-	
+
+\begin{itemize}
+	\item I wish I spent more time learning how to do the wargames in Behemoth. Although I made some progress, it looks really fun. Instead, I spent a considerable amount of time doing Natas. Atleast that gave me some experience writing web-interacting Python!
+\end{itemize}
+
 Reflection: How you document issues you encounter and how you overcame that adversity:
-	-Any issues I had are also part of the analysis, things I tried that did not work, times where I was not making any progress.
+
+\begin{itemize}
+	\item Any issues I had are also part of the analysis, things I tried that did not work, times where I was not making any progress.
+\end{itemize}
 
 Progression of your project proposal
-	-I do not think I met the expectation I outlined in the project proposal. I think I got too carried away doing Natas that I neglected the other war games. Again, I wish I did more Behemoth lol
+
+\begin{itemize}
+	\item I do not think I met the expectation I outlined in the project proposal. I think I got too carried away doing Natas that I neglected the other war games. Again, I wish I did more Behemoth lol
+\end{itemize}
 
 Impressive elements of your project - what cool stuff did you do?!:
-	-I think the coolest part of this project was when I was able to draw on knowledge I learnt about in previous CTFs to use in future CTFs. My first instinct whenever I ran into a new binary or website is to play around with it in weird ways, for binarys I run ltrace/strace, for websites I inspect element.
-	-Another cool and satisfying part is all the little programs that I made along the way to help solve the war games. Although they aren't very elegant, they work, and for that I am proud :)
+
+\begin{itemize}
+	\item I think the coolest part of this project was when I was able to draw on knowledge I learnt about in previous CTFs to use in future CTFs. My first instinct whenever I ran into a new binary or website is to play around with it in weird ways, for binarys I run ltrace/strace, for websites I inspect element.
+	\item Another cool and satisfying part is all the little programs that I made along the way to help solve the war games. Although they aren't very elegant, they work, and for that I am proud :)
+\end{itemize}
 \end{document}
