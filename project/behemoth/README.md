@@ -31,8 +31,6 @@ Next, we need the location of the buffer. We'll just write the previous password
 
 Looks like all those As we wrote now live around the address `0xffffd354`. So, when we write our shellcode, we'll use `0xffffd364` to jump back to. We can then NOP-slide down into the shellcode.
 
-Now to write our first python script: `breakhemoth1.py`
-
 ...Turns out, after CONSTANT attempts (I spent like 3 hours on this lol) I just cannot get the bloody thing to work. It was just constantly segfaulting, even though I am sure that I have the correct address.
 
 I decided to consult some solutions, and even then, doing anything that was similar to there's that DIDN'T involve environment variables just did not work. I DID manage to get a 'executing /usr/bin/dash' in GDB at one point (shown below), but copying and pasting the EXACT python script in a normal terminal then immediately segfaults. I have NO clue why this works, it is definitely above me for now.
@@ -90,4 +88,4 @@ Indeed, the behemoth2 binary makes a direct call to `touch`. So, we can simply w
 
 Just like that, running `behemoth2` gives us the flag! 
 
-Very clever, very, \textit{very} nasty.
+Very clever, very, *very* nasty.

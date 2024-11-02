@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.9.30)  1 NOV 2024 23:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.9.30)  2 NOV 2024 18:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -191,6 +191,7 @@ LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 Package hyperref Info: Link coloring OFF on input line 8.
+(./report.out) (./report.out)
 \@outlinefile=\write3
 \openout3 = `report.out'.
 
@@ -201,11 +202,17 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 10.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 17.
+(Font)              <7> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 17.
+(Font)              <5> on input line 12.
 
-Overfull \hbox (17.50078pt too wide) in paragraph at lines 32--33
+Overfull \hbox (2.31291pt too wide) in paragraph at lines 11--13
+[]\OT1/cmr/bx/n/10 Link to the wargames write-ups: []$\OT1/cmtt/m/n/10 https : 
+/ / github . com / erik-[]pedersen /
+ []
+
+
+Overfull \hbox (17.50078pt too wide) in paragraph at lines 35--36
 []\OT1/cmr/m/n/10 For Kryp-ton and Natas, a bunch of on-line tools for hash-ing
 , en-cod-ing/decoding
  []
@@ -218,21 +225,14 @@ Overfull \hbox (17.50078pt too wide) in paragraph at lines 32--33
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-
-
-Package rerunfilecheck Warning: File `report.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `report.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+Package rerunfilecheck Info: File `report.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 7500 strings out of 476076
- 116123 string characters out of 5793775
- 1935187 words of memory out of 5000000
- 29568 multiletter control sequences out of 15000+600000
+ 7505 strings out of 476076
+ 116190 string characters out of 5793775
+ 1936187 words of memory out of 5000000
+ 29569 multiletter control sequences out of 15000+600000
  561915 words of font info for 49 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,6n,79p,343b,501s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -242,10 +242,10 @@ s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cms
 y10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/
 share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on report.pdf (3 pages, 94218 bytes).
+Output written on report.pdf (3 pages, 94607 bytes).
 PDF statistics:
- 58 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 60 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  4 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

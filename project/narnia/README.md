@@ -155,4 +155,4 @@ Running `ltrace` with an `argv[1]` just being 264 A's, we discover the buffer ad
 We now just reuse `pwnarnia2.py` and update some numbers, including the binary, padding and the retaddr. Since we have not changed machines, we can just re-use the shellcode.
 
 
-Hi, me from 2 hours in the future. I expected this to be a really quick 5 minute job where I just adapt `pwnarnia2.py` before I go to bed. Well, it's now 2:15am and I just keep getting "illegal instruction," so idk what's happening. Time to go to bed.
+Hi, me from 2 hours in the future. I expected this to be a really quick 5 minute job where I just adapt `pwnarnia2.py` before I go to bed. Well, it's now 2:15am and I just keep getting "illegal instruction," so idk what's happening. Time to go to bed. :')

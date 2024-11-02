@@ -31,3 +31,5 @@ def main():
         for i in range(0, 26):
             print(f"    {rotWord(word, i)}")
 main()
+
+#solution: ROTTEN
