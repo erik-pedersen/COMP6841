@@ -1,0 +1,176 @@
+<h1 id="natas">NATAS</h1>
+<h2 id="natas0-natas1-">Natas0 --&gt; Natas1:</h2>
+<p>Very simple, just inspect element and the flag is an HTML comment</p>
+<h2 id="natas1-natas2-">Natas1 --&gt; Natas2:</h2>
+<p>Same thing, just hit F12</p>
+<h2 id="natas2-natas3-">Natas2 --&gt; Natas3:</h2>
+<p>First interesting one. &quot;There is nothing on this page&quot; implies that we need to go to some other page. In the HTML we have an image under &quot;files/image.png.&quot;</p>
+<p>My first impression was to see if the image contained any metadata, so I checked the metadata and came up with nothing.</p>
+<p>I knew from setting up my public_html on CSE that websites do often have file structures, and that this image lives under a directory called &quot;files.&quot; So, we navigate to that directory (natas2.natas.labs.overthewire.org/files), and the flag is under users.txt.</p>
+<h2 id="natas3-natas4-">Natas3 --&gt; Natas4:</h2>
+<p>Having never done CTFs before, I already got stuck here for 20 minutes, and had to check the solution. This is not a bad thing, because now I have an opportunity to learn something new!</p>
+<p>I learnt that websites can avoid being seen by Google or other web-bots by using a file called &quot;robots.txt.&quot; And indeed, natas3.natas.labs.overthewire.org/robots.txt exists!</p>
+<p>Navigating to that, we see that the website that cannot be seen by web-bots is a directory called &quot;s3cr3t,&quot; so navigating to natas3.natas.labs.overthewire.org/s3cr3t immediately gives us the flag.</p>
+<p>Out of curiosity, I checked if facebook.com had a robots.txt, and lo and behold: <a href="https://facebook.com/robots.txt">https://facebook.com/robots.txt</a>
+<img src="image.png" alt="alt text"></p>
+<h2 id="natas4-natas5-">Natas4 --&gt; Natas5:</h2>
+<p>&#39;Authorized users should only come from natas5.&#39; Somehow, natas4 is checking which website we came from. I know from COMP3311 networks that an HTTP header is often used to send all kinds of information - maybe that information is stored there?</p>
+<p>Checking out the wikipedia page for HTTP headers, there is in fact a header called &quot;referer.&quot; Perhaps we can modify this so that we can gain access?</p>
+<p>By default, the <code>$ curl</code> command sends an HTTP request, maybe the man page has something useful?</p>
+<p><img src="image2.png" alt="alt text"></p>
+<p>Indeed it does. Let&#39;s use curl to enter the login details to get into natas4, and also set the &#39;referer&#39; header to be natas5.natas.labs.overthewire.org.</p>
+<p><img src="image3.png" alt="alt text"></p>
+<p>And there we have the flag.</p>
+<h2 id="natas5-natas6-">Natas5 --&gt; Natas6:</h2>
+<p>This time we are simply told that we are &quot;not logged in.&quot; How does a website know if we are logged in or not? In order to store information about users, websites will use cookies. The nice thing about cookies is that they are stored partially on the local end and partially on the server end. If they&#39;re stored locally, we can modify them!</p>
+<p>Hitting F12 and going to &quot;Storage&quot; and then &quot;Cookies&quot; shows a &#39;loggedin&#39; cookie with a value of &#39;0.&#39; We&#39;ll change this to 1, and voila, flag obtained.</p>
+<h2 id="natas6-natas7-">Natas6 --&gt; Natas7:</h2>
+<p>We are given a prompt to &quot;input secret,&quot; with a button called &quot;Submit query.&quot; Immediately this makes me think of SQL. Before checking the sourcecode, I try inputting:
+<code>secret&quot; OR &quot;1&quot; = &quot;1&quot;; --</code>
+and then
+<code>secret&#39; OR &#39;1&#39; = &#39;1&#39;; --</code>
+Neither works, so I cave and look at the source code.</p>
+<p><img src="image4.png" alt="alt text"></p>
+<p>The stuff enclosed by the &lt;? ?&gt; tags is PHP, which I do not know much about, so time to learn a little bit!</p>
+<p>I used w3schools.com and just had a look through the PHP tutorial pages, I did not really try to write any PHP myself.</p>
+<p>After having a look through, I couldn&#39;t <i> really </i> find too much that I could exploit in terms of injection. Maybe there is a way? I&#39;m not too sure at the moment, but it&#39;s something I wrote down to explore later.</p>
+<p>Instead, I had a look to see if there was anything else of interest. There was the line: 
+<code>include &quot;includes/secret.inc&quot;.</code></p>
+<p>This looks very much like #include in C, where you source functions from a file - maybe we can access that file?</p>
+<p>Navigating to natas6.natas.labs.overthewire.org/includes/secret.inc and hitting F12 reveals the &quot;secret,&quot; and inputting that password gives us the flag - neat, no programming even required!</p>
+<p>flag=bmg8SvU1LizuWjx3y7xkNERkHxGre0GS</p>
+<h2 id="natas7-natas8-">Natas7 --&gt; Natas8:</h2>
+<p>We are given hyperlinks to the &#39;home&#39; and &#39;about&#39; pages. The hint in the HTML inspector says that the password for webuser natas8 is in /etc/natas_webpass/natas8.</p>
+<p>Simply replacing ?page=home with ?page=/etc/natas_webpass/natas8 gives us the flag.</p>
+<p>flag=xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q</p>
+<h2 id="natas8-natas9-">Natas8 --&gt; Natas9:</h2>
+<p>Another query. Let&#39;s view the source:</p>
+<p><img src="image5.png" alt="alt text"></p>
+<p>We have an encodedSecret: 3d3d516343746d4d6d6c315669563362</p>
+<p>to encode the secret, it uses a function called <code>base64_encode</code>, followed by <code>strrev</code> (probably string reverse?), followed by <code>bin2hex.</code></p>
+<p>Let&#39;s just try reversing all of these, converting hex2bin, strrev again, and then base64_decoding. All of these can be done using online tools at onlinephp.io.</p>
+<p>flag=ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t</p>
+<h2 id="natas9-natas10-">Natas9 --&gt; Natas10:</h2>
+<p>A dictionary searcher! Inputting a * character gives us the source code, or you can just click &quot;view sourcecode&quot;.</p>
+<p>The command run is <code>passthru(&quot;grep -i $key dictionary.txt&quot;);</code>.</p>
+<p>We can most definitely inject something into this, since there are no quotes are the <code>$key</code> argument!</p>
+<p>We know from before that all of the flags are stored in <code>/etc/natas_webpass/natasX,</code> so maybe we can inject <code>$ cat /etc/natas_webpass/natas10</code>? Let&#39;s try it!</p>
+<p>Inputting <code>a; cat /etc/natas_webpass/natas10;</code> does the trick.</p>
+<p>flag=t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu</p>
+<h2 id="natas10-natas11-">Natas10 --&gt; Natas11:</h2>
+<p>Now they filter on certain characters... Specifically, the characters <code>[;|&amp;]</code> are not allowed.</p>
+<p>As we learnt in COMP6841, blacklisting is not a good idea, there are work arounds!</p>
+<p>In this case, we just have to get more creative. &#39;grep&#39; can still be used to print out the complete contents of a file using <code>grep .* &lt;FILE&gt;</code>. Since we can use spaces, let&#39;s run grep on the natas11 webpass file!</p>
+<p><code>grep .* /etc/natas_webpass/natas11.</code></p>
+<p>And it works.
+<img src="image6.png" alt="alt text"></p>
+<p>flag=UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk</p>
+<h2 id="natas11-natas12-">Natas11 --&gt; Natas12:</h2>
+<p>We can change the background colour by putting in the RGB value for that colour. So of course, we change our background to the best colour:</p>
+<p><img src="image7.png" alt="alt text"></p>
+<p>We are told that &quot;cookies are protected with XOR encryption.&quot;</p>
+<p>Looking through the source code, it seems we check if we have a cookie - if we do, we update the data (the background colour and the &quot;showpassword&quot; option) based on what is inside the cookie. Otherwise, it loads default data.</p>
+<p>Maybe if we create our own cookie? We do not know exactly how xor_encrypt works though, as we do not know the key used to form the XORs. If we can get the key, then we can create our own cookie to get the password.</p>
+<p>Maybe we can work out the key by sampling inputs and seeing the outputs? That sounds hard...</p>
+<p>I also learnt that json_encode literally just transforms a PHP array into a JSON array.</p>
+<p>By now, it&#39;s been a while, and after looking through the code for any other ways of cracking it, I gave up and checked the solutions. (<a href="https://medium.com/@n01s/solving-natas-11-df246fcf7828">https://medium.com/@n01s/solving-natas-11-df246fcf7828</a>).</p>
+<p>From here, we learn the following very useful facts about XOR encryption:</p>
+<p><img src="image8.png" alt="alt text"></p>
+<p>We know that, by default, <code>$plaintext = array( &quot;showpassword&quot;=&gt;&quot;no&quot;, &quot;bgcolor&quot;=&gt;&quot;#ffffff&quot;);,</code> and we know the corresponding encrypted_text just by looking at the cookies in the F12-menu. So, if we create our own version of <code>xor_encrypt,</code> using as input the encrypted_text and using as a key the plaintext, that should give us our key! Let&#39;s try it.</p>
+<p>First we get the key:</p>
+<p><img src="image9.png" alt="alt text"></p>
+<p>We see that the key is probably &quot;eDWo.&quot; Using that as the key to generate our own cookie:</p>
+<p><img src="image10.png" alt="alt text"></p>
+<p>(Yes, we are setting the bgcolor to #ff00ff again, this time in the cookie we are generating. I have to see if it works!).</p>
+<p><img src="image11.png" alt="alt text"></p>
+<p>Bingo. This makes me want to look further into how to break certain encryption algorithms - exploiting the XOR operator&#39;s inverse being XOR itself, I am guessing, is just one way we could break encryption. </p>
+<p>flag=yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB</p>
+<h2 id="natas12-natas13-">Natas12 --&gt; Natas13:</h2>
+<p>Having a look at the source code, there does not seem to be any checks made that will grant us the new flag. More than likely, we&#39;re going have to find the flag somewhere else.</p>
+<p>After spending all my time staring at the php code trying to figure out how to exploit it, I did not come up with much.</p>
+<p>We have the ability to upload our own files. Although the website says we should upload a JPEG, there does not appear to actually be any checks made on the type of file we upload. So, more than likely, we can upload our own php file!</p>
+<p>Now, since I have not learned php, I am going have to get some help. I once again look for some solutions, and came across <a href="https://learnhacking.io/overthewire-natas-level-12-walkthrough/">https://learnhacking.io/overthewire-natas-level-12-walkthrough/</a>. </p>
+<p>The solution makes reference to something called a &quot;webshell,&quot; I note this down as something to learn about later, as this is probably going to come in really handy in the future (on second thought, I probably was already using a &#39;webshell&#39; back in natas9, when we were calling &#39;grep&#39;!)</p>
+<p>Another useful thing I learnt from the solution is that we the file, when uploaded, is automatically changed to &quot;.jpg&quot; in the webpage source code - we can literally just edit this ourselves by changing &quot;jpg&quot; to &quot;php,&quot; that&#39;ll probably come in handy later!</p>
+<p>Anyways, uploading our shell.php script:</p>
+<p><img src="shellphp.png" alt="alt text"></p>
+<p>we can now execute shell commands by appending <code>?cmd=&lt;COMMAND&gt;</code> to the end. Here I also learnt that we can input ASCII into a URL by using <code>%&lt;HEX&gt;</code>, where <code>&lt;HEX&gt;</code> is just the hex representation of whatever character we want to include, e.g a space is <code>%20</code>.</p>
+<p>Because I wanted to learn more about this webshell, I decided I would just try to create a file in the directory where everyone uploads their things - running <code>?cmd=touch%20hello_there</code> and then running <code>?cmd=ls</code>, we can find my file among all the other things people have uploaded! Pretty neat.</p>
+<p><img src="image12.png" alt="alt text"></p>
+<p>Just to play around with the webshell a bit more, I made a small bash script that let&#39;s me interact with the webshell without having to constantly type things into the URL.</p>
+<p><img src="image13.png" alt="alt text">
+<img src="image14.png" alt="alt text"></p>
+<p>Something I could possibly add is automatic conversion of ASCII symbols to the corresponding URL code (so I do not have to type in %20 to mean &#39;space&#39;)</p>
+<p>flag=trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC</p>
+<h2 id="natas13-natas14-">Natas13 --&gt; Natas14:</h2>
+<p>Now we can only upload image files... Maybe we can make our file look like an image?</p>
+<p>What determines if a file is an image? I first tested just renaming my &quot;shell.php&quot; file to &quot;shell.jpg&quot; and uploading, but that did not work - it detected that it was still not an image.</p>
+<p>A quick Google search of the &quot;exif_imagetype&quot; function told me that it&#39;s really just checking the first four bytes of the file - the magic number of the file (like TABI/TBBI/TCBI in COMP1521). So, what if I just chuck the four bytes for JPG at the start of my .php file?</p>
+<p><img src="image15.png" alt="alt text"></p>
+<p>Uploading that...</p>
+<p><img src="image16.png" alt="alt text"></p>
+<p>Too easy.</p>
+<p>flag=z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ</p>
+<h2 id="natas14-natas15-">Natas14 --&gt; Natas15:</h2>
+<p>Username and password entry... Okay SURELY this is SQL right? Let&#39;s try it:</p>
+<p><img src="image17.png" alt="alt text">
+<img src="image18.png" alt="alt text"></p>
+<p>And this time, I was rewarded without needing to check the source code!</p>
+<p>All luck this time, of course!
+flag=SdqIqBsFcz3yotlNYErZSZwblkm0lrvx</p>
+<h2 id="natas15-natas16-">Natas15 --&gt; Natas16:</h2>
+<p>Check existence of a username, probably more SQL injection?</p>
+<p>Just trying to guess at the query, it&#39;s probably something like
+<code>SELECT * FROM &lt;tablename&gt; WHERE username = &quot;&lt;user input&gt;&quot;;</code></p>
+<p>Checking the sourcecode, I was right, with the tablename being &#39;users.&#39;</p>
+<p>Trying the usual input of:
+<code>admin&quot; OR &quot;1&quot; = &quot;1</code></p>
+<p>we simply get &quot;This user exists.&quot;</p>
+<p>Realistically, we want to do more than just check existence - we want the usernames and passwords!</p>
+<p>Specifically, we&#39;ll probably want the password of the user named &quot;natas16,&quot; which we can verify does exist using the prompt.</p>
+<p>So, how do we get the password? The only thing the prompt will print out is one of the three print statements in the source code, none of which tell us anything about the user.</p>
+<p>My mind goes to somehow cause an error, and inside that error will be printed out the username and password. I have absolutely no clue how to do this though.</p>
+<p>Another thing is that we could try artifically making the query more complicated - we know that natas16 exists, what if we also start to check his password? In SQL, you can do this with the <code>LIKE</code> command. So, you could probably slowly piece together the password like that, but it&#39;d take too much time.</p>
+<p>At this point, I could stuck, and decided to just check the solution, and... The solution I found (<a href="https://medium.com/@samarthkokil64/overthewire-updated-natas-walkthrough-level-15-951493ef7d30">https://medium.com/@samarthkokil64/overthewire-updated-natas-walkthrough-level-15-951493ef7d30</a>) pretty much says what I did - except they decided that &quot;it&#39;d take too much time&quot; simply is not true, and wrote a python script to get the password!</p>
+<p>Here&#39;s another learning point - if you have a potential solution, but dismiss it for things like &quot;it&#39;d take too long&quot; or &quot;it&#39;s too hard,&quot; atleast give it a go!</p>
+<p>So, with this knowledge, I&#39;m going to try to write my own script to slowly piece together this flag.</p>
+<p>Cobbled together with duct tape, hopes and dreams, I present to you: bruteForce.py</p>
+<p>Does it work? Yeah. But it&#39;s slow and it sucks and I should probably learn how to use Python rather than spawning a subshell to run cURL and grep lol</p>
+<p>Anyway, I got the flag!</p>
+<p>flag=hPkjKYviLQctEW33QmuXL6eDVfMW4sGo</p>
+<h2 id="natas16-natas17-">Natas16 --&gt; Natas17:</h2>
+<p>Another &#39;grep&#39; type problem, this time with even more banned characters! Again, as we learnt in lecture... Blacklisting is not a good solution!</p>
+<p>Notably, they forgot to ban <code>$, (</code> and <code>)</code>, which means we still have access to subshells!</p>
+<p>And indeed, trying some inputs with grep:</p>
+<p><code>$(grep a /etc/natas_webpass/natas17</code></p>
+<p><img src="image19.png" alt="alt text"></p>
+<p><code>$(grep b /etc/natas_webpass/natas17</code></p>
+<p><img src="image20.png" alt="alt text"></p>
+<p>Taking some inspiration from the previous problem, we can probably piece together the flag by querying the website one character at a time. If output appears, that tells us that the character is not part of the flag - if output does NOT appear, the character IS part of the flag (since the whole flag from <code>/etc/natas_webpass/natas17</code> will be passed to <code>grep</code> for the <code>dictionary.txt</code> file)</p>
+<p>Adapting our brute force python script from before, this time using the &#39;requests&#39; module from python (inspired from the last exercise!), we have: <code>BruteForceNatas16.py</code></p>
+<p>(You can tell I&#39;m good at naming things)</p>
+<p>Even though it is slow (probably cause I&#39;m in Australia), I must say it is very satisfying watching the flag slowly appear.</p>
+<p>flag=EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC</p>
+<h2 id="natas17-natas18-">Natas17 --&gt; Natas18:</h2>
+<p>Same as Natas 15, only this time nothing is printed out! Since nothing else is ever outputted, we&#39;ll need some other way to determine was is happening. Maybe a timing attack? I&#39;m not sure how to go about this though, as the database only has one element in it, and that&#39;s natas18, so measuring the time it takes for the query to finish and move into $res does not seem very reliable...</p>
+<p>From here: <code>https://www.abatchy.com/2016/12/natas-level-17</code> I was made aware of the &#39;sleep&#39; function in SQL... Now that could definitely be useful! If the query answer is &#39;yes,&#39; we can sleep for some amount of time in response. If the query answer is &#39;no&#39;, then it will be fast. Measure the time it takes to perform each query (and pray to whatever Gods may listen that my internet does not drop out), and we should be able to piece together the flag that way!</p>
+<p>...And once again, after editing the python script I had from Natas16, I slowly piece together the flag for Natas17 :)</p>
+<p><img src="image21.png" alt="alt text"></p>
+<p>flag=6OG1PbKdVjyBlpxgD4DDbRG6ZLlCGgCJ</p>
+<h2 id="natas18-natas19-">Natas18 --&gt; Natas19:</h2>
+<p>This time, we are prompted for a username and password. According to the source code, cookies are used to track sessions - maybe we can try spoofing the cookie? </p>
+<p>The maxid is 640 (also from the source code), so let&#39;s try incrementing our cookie value from 0 to 640 and see if that let&#39;s us in!</p>
+<p>A quick Google search tells us how to change the value of cookies in python. We can simply put it into the &#39;cookies&#39; field in our session.post request! And thus was born, <code>bruteForceNatas18.py</code>.</p>
+<p><img src="image22.png" alt="alt text"></p>
+<p>And there&#39;s our flag!
+flag=tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr</p>
+<h2 id="natas19-natas20-">Natas19 --&gt; Natas20:</h2>
+<p>&quot;This page uses mostly the same code as the previous level, but session IDs are no longer sequential.&quot;</p>
+<p>Our brute-force attack for the cookie is over! Indeed, checking the cookie gives us a value that is not a nice number...</p>
+<p><img src="image23.png" alt="alt text"></p>
+<p>It looks like the value is encoded somehow. The numbers are all between 0 and f, which makes it likely that this is somehow hex-encoded. Whacking the value in the cookie into <code>https://cryptii.com/pipes/hex-decoder</code> gives us:</p>
+<p><img src="image24.png" alt="alt text"></p>
+<p>And there we go, the only extra step is to first encode our value (along with the salt, which appears to just be the username you enter), and THEN submit the cookie.</p>
+<p><img src="image25.png" alt="alt text"></p>
+<p>flag=p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw</p>
+

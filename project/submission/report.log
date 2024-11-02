@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.9.30)  2 NOV 2024 18:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.9.30)  2 NOV 2024 19:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -211,16 +211,22 @@ Overfull \hbox (2.31291pt too wide) in paragraph at lines 11--13
 / / github . com / erik-[]pedersen /
  []
 
+[1
 
-Overfull \hbox (17.50078pt too wide) in paragraph at lines 35--36
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts
+/enc/dvips/cm-super/cm-super-ts1.enc}]
+Overfull \hbox (17.50078pt too wide) in paragraph at lines 48--49
 []\OT1/cmr/m/n/10 For Kryp-ton and Natas, a bunch of on-line tools for hash-ing
 , en-cod-ing/decoding
  []
 
-[1
+[2] [3]
+Overfull \hbox (16.44785pt too wide) in paragraph at lines 129--130
+[]\OT1/cmr/m/n/10 The write-ups can be found un-der `project/[WARGAME[]NAME]/RE
+ADME.md` 
+ []
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts
-/enc/dvips/cm-super/cm-super-ts1.enc}] [2] [3] (./report.aux)
+[4] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -229,23 +235,23 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 7505 strings out of 476076
- 116190 string characters out of 5793775
+ 7508 strings out of 476076
+ 116256 string characters out of 5793775
  1936187 words of memory out of 5000000
- 29569 multiletter control sequences out of 15000+600000
+ 29571 multiletter control sequences out of 15000+600000
  561915 words of font info for 49 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,6n,79p,343b,501s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,6n,79p,343b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/font
 s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cms
 y10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/
 share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on report.pdf (3 pages, 94607 bytes).
+Output written on report.pdf (4 pages, 99172 bytes).
 PDF statistics:
- 60 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
- 4 named destinations out of 1000 (max. 500000)
+ 71 PDF objects out of 1000 (max. 8388607)
+ 50 compressed objects within 1 object stream
+ 5 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

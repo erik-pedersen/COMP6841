@@ -1,0 +1,65 @@
+<h1 id="leviathan">Leviathan</h1>
+<h2 id="leviathan0-leviathan1">Leviathan0 --&gt; Leviathan1</h2>
+<p>Very straightforward, just ls -a to view any hidden files in the directory.</p>
+<p>In the .backup directory, there is a bookmarks.html file. Searching this file using &#39;grep&#39; for leviathan gives us the flag.</p>
+<p>flag=3QJ3TgzHDq</p>
+<p><img src="image1.png" alt="alt text"></p>
+<h2 id="leviathan1-leviathan2">Leviathan1 --&gt; Leviathan2</h2>
+<p>We have an executable called &#39;check.&#39; Running it prompts us for a password. Trying the password &#39;password&#39; gives us &quot;wrong password, good bye ...&quot;</p>
+<p>We can try to get a rough idea of how this program runs by running <code>ltrace</code>:</p>
+<p><img src="image2.png" alt="alt text"></p>
+<p>We can see that only the first three characters of the password are actually read in from the 3 <code>getchar</code> calls, and those characters are compared in <em>plain text</em> with &#39;sex&#39; - indeed, if we try that as the password:</p>
+<p><img src="image3.png" alt="alt text"></p>
+<p>then we find that we are now the user leviathan2! Which means, we can probably read the password for leviathan2 by checking the passwords file.</p>
+<p>flag=NsN1HwFoyN</p>
+<h2 id="leviathan2-leviathan3">Leviathan2 --&gt; Leviathan3</h2>
+<p>This time we are given an executable called &#39;printfile.&#39; Testing this on itself, it looks like all it does is print out the contents of a file:</p>
+<p><img src="image4.png" alt="alt text"></p>
+<p>Also of interest, it looks like it uses <code>/bin/cat</code> to print out the contents of a file, this could definitely help us out! Trying to printfile on the leviathan3 password file:</p>
+<p><img src="image5.png" alt="alt text"></p>
+<p>Maybe that was wishful thinking...</p>
+<p>Alright, let&#39;s at least try and see what else this program does. We&#39;ll make our own text files and see how printfile works on those.</p>
+<p><img src="image6.png" alt="alt text"></p>
+<p>Looks like it can only handle printing one file at a time.</p>
+<p>One common issue with a lot of shell-interacting executables is how it handles whitespace and globbing, so let&#39;s mess around with that for a bit.</p>
+<p><img src="image7.png" alt="alt text"></p>
+<p>And the answer is that it doesn&#39;t. That is, the printfile executable tries to run &#39;cat&#39; on two seperate files now... But that&#39;s interesting, because the intended use of printfile only works on one files.</p>
+<p>Let&#39;s see if we can get printfile to run /bin/cat on the password file this way - the first file it can print out normally, and the second will be the password file:</p>
+<p><img src="image8.png" alt="alt text"></p>
+<p>Great success :)</p>
+<p>flag=f0n8h2iWLP</p>
+<h2 id="leviathan3-leviathan4">Leviathan3 --&gt; Leviathan4</h2>
+<p>We are given another executable file called &#39;level3&#39;, which again asks for the password. Let&#39;s try what we did for leviathan1 and look at what the executable is roughly doing with <code>ltrace</code>:</p>
+<p><img src="image9.png" alt="alt text"></p>
+<p>Once again, a simple <code>strcmp</code> call is being made, which compares our input with &#39;snlprintf.&#39; So, using that as input:</p>
+<p><img src="image10.png" alt="alt text"></p>
+<p>and we immediately get a shell... That seems a bit too easy.</p>
+<p>flag=WG1egElCvO</p>
+<h2 id="leviathan4-leviathan5">Leviathan4 --&gt; Leviathan5</h2>
+<p>Once again, we run <code>ls -a</code> to find hidden files, and we come across another executable called &#39;bin.&#39; When we run this, we get a sequence of binary digits:</p>
+<p>00110000 01100100 01111001 01111000 01010100 00110111 01000110 00110100 01010001 01000100 00001010 </p>
+<p>Where do these come from? Running <code>ltrace</code> on the executable shows that we are running &quot;fopen&quot; on leviathan5.</p>
+<p><img src="image11.png" alt="alt text"></p>
+<p>My guess, then, is that we have simply binary encoded the flag. Converting the binary to ASCII gives:</p>
+<p>flag=0dyxT7F4QD</p>
+<h2 id="leviathan5-leviathan6">Leviathan5 --&gt; Leviathan6</h2>
+<p>Another executable. This time, on running, it prints out &quot;cannot find /tmp/file.log.&quot; So, creating my own file.log, and once again running executable, we get:</p>
+<p><img src="image12.png" alt="alt text"></p>
+<p>It simply prints out the file. Interestingly, it also deletes the file.log after reading it.</p>
+<p>Running <code>stat</code> on the executable, we see that it is indeed owned by leviathan6. Somehow, we&#39;ll have to the contents of <code>/etc/leviathan_pass/leviathan6</code> into file.log, and print it out.</p>
+<p>One way we could do this is symlinking:</p>
+<p><img src="image13.png" alt="alt text"></p>
+<p>It&#39;s as easy as that :)</p>
+<p>flag=szo7HDB88w</p>
+<h2 id="leviathan6-leviathan7">Leviathan6 --&gt; Leviathan7</h2>
+<p>We&#39;re given an executable that requires a four digit code. Four digit codes are, by their nature, not very secure. So, let&#39;s try brute force it!</p>
+<p>Here&#39;s a very straightforward python script that does that for us:</p>
+<pre><code class="lang-python"><span class="hljs-meta">#!/usr/bin/env python3</span>
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, <span class="hljs-number">10000</span>):
+  print(f<span class="hljs-string">"Trying {i}:"</span>)
+  os.system(f<span class="hljs-string">"~/leviathan6 {i}"</span>)
+</code></pre>
+<p>Running this, the python program stops when we are &quot;trying 7123,&quot; so there&#39;s our passcode. We get given a shell, and that let&#39;s us <code>cat leviathan7</code>. </p>
+<p>flag=qEs5Io5yM8</p>
+

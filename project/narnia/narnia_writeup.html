@@ -1,0 +1,79 @@
+<h1 id="narnia">NARNIA</h1>
+<h2 id="narnia0-narnia1-">Narnia0 --&gt; Narnia1:</h2>
+<p>Pretty simple to begin with, we run <code>./narnia1</code> and are presented with a prompt asking us to change a variable  of value <code>0x41414141</code> (which I recognise as the ASCII for <code>AAAA</code>) to have the value <code>0xdeadbeef</code>.</p>
+<p>We&#39;ll first try to find where this variable lives by entering into our buffer the classic <code>AAAABBBBCCCCDDDD</code>...</p>
+<p><img src="image1.png" alt="alt text"></p>
+<p>We see that the overwritten value is <code>1x46464646</code> or <code>FFFF</code>, so that&#39;s where we should insert the values <code>0xefbeadde</code> (the appropriate endianess for the value <code>0xdeadbeef</code> which is desired).</p>
+<p>To do this, we write a quick python script using pwntoos, which I&#39;ll call pwnarnia1.py</p>
+<p><img src="image2.png" alt="alt text"></p>
+<p>and from there, we can run it and we&#39;re granted a shell!</p>
+<p><img src="image3.png" alt="alt text"></p>
+<p>We can now read <code>/etc/narnia_pass/narnia1</code> and we get out flag :)</p>
+<p>flag=WDcYUTG5ul</p>
+<h2 id="narnia1-narnia2-">Narnia1 --&gt; Narnia2:</h2>
+<p>This time we are told to &quot;Give me something to execute at the env-variable EGG.&quot;</p>
+<p>I tried just setting EGG to a shell command:
+<code>$ env EGG=&#39;echo hello&#39; ./narnia1</code></p>
+<p>but this just gave me a segmentation fault.</p>
+<p>I decided to look a look at the source code, <code>narnia1.c</code>.</p>
+<p>In it, we run <code>getenv</code> on &quot;EGG&quot;, and save it in a variable called <code>ret.</code> We then run <code>ret();</code>, indicating that this is being treated as a function. </p>
+<p>With this knowledge, we could try writing our own function to gain a shell! Only, our &#39;code&#39; will have to be machine readable, so we ought to use shellcode.</p>
+<p>Running <code>uname -a</code> we see that the system narnia runs on is an x86_64 machine. We therefore look for some shellcode on shell-storm.org for the appropriate processor.</p>
+<p><img src="image4.png" alt="alt text"></p>
+<p>aaaandddd:</p>
+<p><img src="image5.png" alt="alt text"></p>
+<p>a big ol&#39; error, dang.</p>
+<p>The problem here is the NULL byte in our shell code, we&#39;re going to need to find some shellcode that does not have that.</p>
+<p>Rather than trying to snoop for it myself, I looked up the solution (<a href="https://hackmethod.com/overthewire-narnia-1/?v=8bcc25c96aa5">https://hackmethod.com/overthewire-narnia-1/?v=8bcc25c96aa5</a>) and found out that a working one lives at (<a href="http://shell-storm.org/shellcode/files/shellcode-607.html">http://shell-storm.org/shellcode/files/shellcode-607.html</a>). </p>
+<p>Using that, we&#39;re in!</p>
+<p><img src="image6.png" alt="alt text"></p>
+<p>Take away here was learning that you can set environment variables using the &#39;env&#39; argument in pwn.process() </p>
+<p>flag=5agRAXeBdG</p>
+<h2 id="narnia2-narnia3-">Narnia2 --&gt; Narnia3:</h2>
+<p>This time, we&#39;re asked to provide a command-line argument while running the binary. Doing so simply echos back whatever we put in, unless... What if the input was very large?</p>
+<p><img src="image7.png" alt="alt text"></p>
+<p>Segfault - that&#39;s promising. Once again, let&#39;s check source code <code>narnia2.c</code> to see how much we&#39;ll need to flood the input with <code>AAAAAAAAAAAAA</code> until we find when we find when we actually segfault.</p>
+<p><img src="image8.png" alt="alt text"></p>
+<p>we see that our buffer can fit 128 bytes.</p>
+<p>The general idea here is similar to the wargames on the comp6841 ctfd website - we put in our shellcode, and overwrite the return address to point back to our buffer so that our code is executed.</p>
+<p>There&#39;s just one problem - where is the buffer located?</p>
+<p>In this case, it&#39;s quite nice, the buffer is always in the same spot. We can actually work out the address of the buffer using <code>ltrace</code> (remember that from Leviathan?)</p>
+<p><img src="image9.png" alt="alt text"></p>
+<p>Indeed, running the program a bunch of times shows us that the buffer is located at <code>0xffffd338</code>. However, if we use a larger input, we&#39;ll actually find that this location changes depending on the size of argv:</p>
+<p><img src="image11.png" alt="alt text"></p>
+<p>The input in that image is 136 bytes in size - the exact size we will need to overwrite the return address. We see that the address now is <code>0xffffd298</code>, so that&#39;s the address we&#39;ll overwrite our return address with.</p>
+<p>Where did I get 136 bytes from? GDB of course!</p>
+<p>If we fill up our 128 byte buffer with A&#39;s, followed by BBBBCCCCDDDDDEEEE..., then we can easily find the return address - it will be whatever is inside the <code>%EIP</code> register when we eventually segfault.</p>
+<p><img src="image10.png" alt="alt text"></p>
+<p>We see that we segfault at <code>0x43434343</code>, aka where the C&#39;s are. So, that&#39;s where I got the 136 number from - 128 As, 4 Bs and 4Cs. The Cs we will now replace with <code>\x98\xd2\xff\xff</code> - the return address with appropriate endianness.</p>
+<p>When all is said and done, <code>pwnarnia2.py</code> is born, and we run it:</p>
+<p><img src="image12.png" alt="alt text"></p>
+<p>yippee!</p>
+<p>Big take away here was learning that pwn.process() accepts a list as an argument, and that list is your argv.</p>
+<p>flag=2xszzNl6uG</p>
+<h2 id="narnia3-narnia4-">Narnia3 --&gt; Narnia4:</h2>
+<p>Running this code this time expects a file as an argument. Providing an argument to a non-existent file throws an error, and providing an argument to an existing file writes the file&#39;s content to <code>/dev/null</code>.</p>
+<p>Having a look at the source code right away, we notice that there are 3 main buffers: <code>ofile</code>, <code>ifile</code> and <code>buf</code>.</p>
+<p>In particular, the <code>ifile</code> has whatever is inside <code>argv[1]</code> copied into it using <code>strcpy</code> - immediately that tells us that we can overflow the buffer!</p>
+<p>Having a skim through the rest of the file does not reveal anything too helpful. So whatever our exploit is, it&#39;s going to be something to do with overflowing the <code>ifile</code> buffer.</p>
+<p>In particular, overflowing the ifile buffer will overflow INTO the ofile buffer - this is perfect! This means we can over write where the contents of a file gets sent to, instead of <code>/dev/null</code>.</p>
+<p>So that&#39;s our plan, we&#39;ll send the contents of <code>/etc/narnia_pass/narnia4</code> to some other location.</p>
+<p>We&#39;ll make a temporary output file and send our contents to that (my temp file was at <code>/tmp/5Ny0ChdR</code>).</p>
+<p><img src="image13.png" alt="alt text"></p>
+<p>Ok, maybe I got a bit excited. If I include the quotation marks, it tries to specifically open that file, but if I do not, then it just reads the first argument and ignores the rest.</p>
+<p>What we need to do is to perfectly fit the <code>ifile</code> into the 32 bytes - to do THAT, we&#39;d need to control the name of the file. But we can! With symlinks :)</p>
+<p>I create a symbolic link to the password file, and place that into a new directory called &#39;aaaaaaaaaaaa&#39; (just to overflow the buffer). After the a&#39;s, we put the name of the file to write to.</p>
+<p><img src="image14.png" alt="alt text"></p>
+<p>Ok, what&#39;s happening here is a bit complicated.</p>
+<p>When <code>open</code> is called on the <code>ifile</code>, it is going to open the entire file name <code>/tmp/tmp.uKzou8GatR/aaaaaaaaaaaa/tmp/5Ny0ChdR</code> - but that is exactly the symlink to the password file, so in effect, we are just opening the password file.</p>
+<p>Now, when <code>open</code> is called on the <code>ofile</code>, it only sees the <code>/tmp/5Ny0ChdR</code> part, since that&#39;s the part that got overwritten into the <code>ofile</code> buffer, and so that is the location that we write to.</p>
+<p>Wheew, alright, let&#39;s run the binary and see if it worked!</p>
+<p><img src="image15.png" alt="alt text"></p>
+<p>Amazing! This one was lots of fun, I think it was a bit simple but still a really elegant solution!</p>
+<p>flag=iqNWNk173q</p>
+<h2 id="narnia4-narnia5-">Narnia4 --&gt; Narnia5:</h2>
+<p>This one is a very straightforward buffer overflow, similar to the one from before - just overwrite the return address so that it points back to the start of the buffer. The buffer is of size 256 bytes, so we&#39;ll probably need to put in 256 + 4 = 260 bytes, and then the last 4 bytes are the return address to give a total of 264 bytes.</p>
+<p>Running <code>ltrace</code> with an <code>argv[1]</code> just being 264 A&#39;s, we discover the buffer address is consistently located at <code>0xffffd1b4</code>.</p>
+<p>We now just reuse <code>pwnarnia2.py</code> and update some numbers, including the binary, padding and the retaddr. Since we have not changed machines, we can just re-use the shellcode.</p>
+<p>Hi, me from 2 hours in the future. I expected this to be a really quick 5 minute job where I just adapt <code>pwnarnia2.py</code> before I go to bed. Well, it&#39;s now 2:15am and I just keep getting &quot;illegal instruction,&quot; so idk what&#39;s happening. Time to go to bed. :&#39;)</p>
+

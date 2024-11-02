@@ -1,0 +1,46 @@
+<h1 id="behemoth">BEHEMOTH</h1>
+<p>Now for some stuff WITHOUT the source code. Should be fun? (edit: help)</p>
+<h2 id="behemoth0-behemoth1-">Behemoth0 --&gt; Behemoth1:</h2>
+<p>We start with <code>behemoth/behemoth0</code>. Starts off nice enough, we run <code>ltrace</code> (shoutouts to Leviathan) and in the <code>strcmp</code> call we get the password to the binary. Nice!</p>
+<p><img src="image0.png" alt="alt text"></p>
+<p>flag=8YpAQCAuKf</p>
+<h2 id="behemoth1-behemoth2-">Behemoth1 --&gt; Behemoth2:</h2>
+<p>Alright, now it&#39;s a bit harder. We&#39;re given a prompt to type in a password, and this will authenticate us. Our method of just running <code>ltrace</code> does not work anymore.</p>
+<p>Instead, I noticed that if you just type a really long password, we segmentation fault. This is the classic sign of a buffer overflow, like what is used in the 6841 ctfd war games - only this time we do not get the source file. </p>
+<p>The most likely attack, then, is to write some shellcode into the buffer, then overwrite the return address so we return back into the buffer. Only thing we need to do is get the address of the buffer. Lucky for us, ASLR is deactivated, so we can just check where the buffer lives in gdb.</p>
+<p>First things first, let&#39;s work out how many bytes we need to write until we reach the return address. After a bit of testing, I worked it out to be 71 bytes, and then the next 4 is the return address.</p>
+<p><img src="image2.png" alt="alt text"></p>
+<p>From the above image - 71 As followed by 4 Bs, and the SEGFAULT is on address <code>0x42424242</code> - which is our Bs!</p>
+<p>Next, we need the location of the buffer. We&#39;ll just write the previous password, but this time check the stack.</p>
+<p><img src="image1.png" alt="alt text"></p>
+<p>Looks like all those As we wrote now live around the address <code>0xffffd354</code>. So, when we write our shellcode, we&#39;ll use <code>0xffffd364</code> to jump back to. We can then NOP-slide down into the shellcode.</p>
+<p>...Turns out, after CONSTANT attempts (I spent like 3 hours on this lol) I just cannot get the bloody thing to work. It was just constantly segfaulting, even though I am sure that I have the correct address.</p>
+<p>I decided to consult some solutions, and even then, doing anything that was similar to there&#39;s that DIDN&#39;T involve environment variables just did not work. I DID manage to get a &#39;executing /usr/bin/dash&#39; in GDB at one point (shown below), but copying and pasting the EXACT python script in a normal terminal then immediately segfaults. I have NO clue why this works, it is definitely above me for now.</p>
+<p><img src="image3.png" alt="alt text"></p>
+<p>Alright, I&#39;ll try something new then. We&#39;ll try out this &#39;environment variable&#39; technique.</p>
+<p>(I&#39;ll be putting this in the logbook, because I feel like this is actually quite a significant thing I&#39;m learning here lol)</p>
+<p>From my understanding, since ASLR is off, the environment variables being used will always end up in the same place, and so we can find the address of the environment variable externally by running a C program.</p>
+<p>At the environment variable, we store our shellcode. Effectively what this lets us do is, instead of writing into the buffer, we write into the environment variable, and just overwrite the return address to point to our environment variable.</p>
+<p>It seems like, by convention, we call this environment variable &#39;EGG.&#39;</p>
+<p>One we know the address our environment variable will be at, we can then overwrite the return address and we should be sweet. let&#39;s try it.</p>
+<p>First, we create the &#39;EGG&#39;:</p>
+<p><img src="image4.png" alt="alt text"></p>
+<p>Next, we check where the EGG is going to show up. To do this, we create a simple C program that 1. finds the address of EGG and 2. adjusts the location of &#39;EGG&#39; based on the program name. The source code I wrote up is here:</p>
+<p><img src="image5.png" alt="alt text"></p>
+<p>To compile this, we use the <code>-m32</code> flag, as we are using 32-bit addresses on this machine.</p>
+<p>Now, we run this to get the address of the EGG:</p>
+<p><img src="image6.png" alt="alt text"></p>
+<p>Finally, we overflow our buffer and hope for the best:</p>
+<p><img src="image7.png" alt="alt text"></p>
+<p>and there was much rejoicing (yayyy)</p>
+<p>Now I&#39;m really curious why my previous attempts did not work - when I have more time after the something awesome project I&#39;ll check it out. But for now, I have a new tool: using environment variables to hold the shellcode for buffer overflow attacks :)</p>
+<p>flag=IxPJbQtH8q</p>
+<h2 id="behemoth2-behemoth3-">Behemoth2 --&gt; Behemoth3:</h2>
+<p>This one was really cool, and made me realise exactly WHY &#39;calls to os.system are dangerous&#39; in the context of python programming. </p>
+<p>Effectively, we just use the fact that whenever you call a shell function (<code>echo</code>, <code>cat</code>, <code>touch</code>), it attempts to locate the appropriate binary by searching the <code>$PATH</code> environment variable.</p>
+<p>If you stick your own directory at the front of <code>$PATH</code>, with your &#39;own version&#39; of <code>echo</code>, <code>cat</code>, whatever in said directory, then that will be the first version of the binary found, and therefore run. </p>
+<p>The trick is, your <code>own version</code> of a shell function could in fact be something completely wild, like privilege escalation, obtaining a shell, or in this case, reading behemoth3&#39;s flag!</p>
+<p>Indeed, the behemoth2 binary makes a direct call to <code>touch</code>. So, we can simply write our own version of <code>touch</code> that actually runs <code>cat</code> on <code>/etc/behemoth_pass/behemoth3</code> and update the <code>$PATH</code> variable to first check our own temporary directory. </p>
+<p>Just like that, running <code>behemoth2</code> gives us the flag! </p>
+<p>Very clever, very, <em>very</em> nasty.</p>
+
